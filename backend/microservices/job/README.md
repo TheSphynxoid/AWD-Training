@@ -1,20 +1,18 @@
 # job microservice
 
 Spring Boot 3.5 / Java 17 service exposing a REST API for **Job** and **Category**
-(one category -> many jobs: `job.category_id -> category.id`), with MySQL and Swagger.
+(one category -> many jobs: `job.category_id -> category.id`), with PostgreSQL and Swagger.
 
 ## 1. Create the database
-MySQL must be running on `localhost:3306` (user `root`, empty password by default).
+PostgreSQL must be running on `localhost:5432` (user `postgres`, password `postgres` by default).
 
 ```bash
-mysql -u root -p < database/job_db.sql
+createdb -U postgres job_db
+psql -U postgres -d job_db -f database/job_db.sql
 ```
-or import `database/job_db.sql` in phpMyAdmin / MySQL Workbench. It creates the `job_db`
-database, the `category` and `job` tables, and some sample data.
-
-No local MySQL? `docker compose up -d` starts MySQL 8.4 on port 3306 and runs the script.
-
-Different credentials? Edit `spring.datasource.username/password` in `application.properties`.
+The script creates the `category` and `job` tables and inserts sample data.
+Different credentials can be supplied with `JOB_DATABASE_URL`,
+`JOB_DATABASE_USERNAME`, and `JOB_DATABASE_PASSWORD`.
 
 ## 2. Run
 ```bash
@@ -56,4 +54,4 @@ POST /api/jobs
 ```
 
 ## Tests
-`mvn test` runs integration tests on in-memory H2 (MySQL mode), so MySQL is not needed for tests.
+`mvn test` runs integration tests on in-memory H2, so PostgreSQL is not needed for tests.

@@ -1,7 +1,13 @@
 # candidat microservice
 
 Spring Boot 3.5 / Java 17 service exposing a REST API for **Candidate** and **Address**
-(one-to-one: `candidate.address_id -> address.id`, unique), with H2 and Swagger.
+(one-to-one: `candidate.address_id -> address.id`, unique), with PostgreSQL and Swagger.
+
+## Database
+PostgreSQL must be running on `localhost:5432`, with a database named `candidat_db`.
+The default credentials are `postgres` / `postgres`; override them with
+`CANDIDAT_DATABASE_URL`, `CANDIDAT_DATABASE_USERNAME`, and
+`CANDIDAT_DATABASE_PASSWORD`.
 
 ## Run
 ```bash
@@ -9,8 +15,6 @@ mvn spring-boot:run
 ```
 - Swagger UI: http://localhost:8081/swagger-ui.html
 - OpenAPI JSON: http://localhost:8081/v3/api-docs
-- H2 console: http://localhost:8081/h2 (user `Badia`, empty password; the JDBC URL is printed in the startup log
-  because `spring.datasource.url` is commented out. Uncomment it or set `jdbc:h2:mem:candidat` for a fixed URL.)
 
 ## Endpoints
 | Method | Path | Description |
@@ -54,4 +58,4 @@ com.awd.candidat
 └── service      CandidateService, AddressService
 ```
 
-Tests: `mvn test` (integration tests with MockMvc).
+Tests: `mvn test` (integration tests with MockMvc and an isolated in-memory H2 database).
